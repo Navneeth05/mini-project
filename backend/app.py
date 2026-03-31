@@ -56,7 +56,10 @@ app = Flask(__name__)
 CORS(app)
 
 # ------------------ Load ML model ------------------
-model, tf, meta, device = load_model("backend/models/best_model.pth", "backend/models/metadata.json")
+MODEL_PATH = BASE_DIR / "models" / "best_model.pth"
+META_PATH = BASE_DIR / "models" / "metadata.json"
+
+model, tf, meta, device = load_model(str(MODEL_PATH), str(META_PATH))
 CLASSES = meta["classes"]
 
 # ------------------ Helpers ------------------
@@ -292,4 +295,5 @@ def weather_forecast():
 
 # ------------------ Run ------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
